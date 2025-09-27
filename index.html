@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sameer — Fancy Effects (Updated)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0e1116;
+      --text:#f0f4f8;
+      --accent:#3b82f6;
+      --muted:#9ca3af;
+      --card: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+    }
+    header{
+      position:fixed;
+      top:0;left:0;right:0;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:1rem 1.5rem;
+      background:rgba(14,17,22,0.72);
+      backdrop-filter:blur(8px);
+      z-index:50;
+      border-bottom:1px solid rgba(255,255,255,0.02);
+    }
+    header h1{
+      margin:0;
+      font-weight:700;
+      font-size:1.2rem;
+      background:linear-gradient(90deg,#60a5fa,#3b82f6);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    header nav a{
+      color:var(--muted);
+      margin-left:1rem;
+      text-decoration:none;
+      font-weight:600;
+      font-size:.95rem;
+    }
+    header nav a:hover{ color:var(--accent) }
+
+    /* HERO */
+    .hero{
+      height:92vh;
+      min-height:520px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      position:relative;
+      padding:6rem 1.25rem 2rem;
+      overflow:hidden;
+    }
+    .bg{
+      position:absolute;
+      width:130%;
+      height:130%;
+      top:-15%;
+      left:-15%;
+      background:radial-gradient(circle at 30% 30%, rgba(59,130,246,0.18), transparent 25%),
+                 radial-gradient(circle at 70% 70%, rgba(99,102,241,0.12), transparent 25%);
+      filter:blur(18px);
+      z-index:0;
+      animation: drift 30s linear infinite alternate;
+    }
+    .bg.layer2{
+      animation-duration:40s;
+      opacity:.9;
+      transform:scale(1.05);
+    }
+    @keyframes drift{
+      0%{ transform:translate(0,0) scale(1) }
+      100%{ transform:translate(60px,30px) scale(1.06) }
+    }
+
+    .hero .content{ position:relative; z-index:2; max-width:980px; width:100% }
+    .hero h1{
+      font-size:2.8rem;
+      line-height:1.02;
+      margin:0 0 .6rem;
+      font-weight:700;
+      letter-spacing:-0.6px;
+    }
+    .hero p{
+      margin:0 auto 1.25rem;
+      color:var(--muted);
+      font-size:1.05rem;
+      max-width:720px;
+    }
+
+    /* type highlight */
+    .type-wrap{
+      display:inline-grid;
+      grid-auto-flow:column;
+      grid-gap:.6rem;
+      align-items:center;
+      justify-content:center;
+      margin-top:.6rem;
+    }
+    .type-label{ font-weight:600; color:var(--muted); font-size:.95rem }
+    .type-box{
+      min-width:180px;
+      padding:.5rem .75rem;
+      background:linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.03);
+      font-weight:700;
+      display:inline-block;
+      color:var(--text);
+      overflow:hidden;
+      position:relative;
+    }
+    .type-inner{
+      display:inline-block;
+      transform:translateY(0);
+      transition:transform .35s ease;
+    }
+
+    /* DYNAMIC BOXES - "I love exploring" */
+    .explore-section{
+      margin-top:2rem;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:1rem;
+      flex-wrap:wrap;
+      padding:1rem 0 0;
+    }
+    .chip{
+      --wob: 0deg;
+      min-width:140px;
+      padding:.7rem 1rem;
+      background:var(--card);
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.04);
+      text-align:center;
+      font-weight:700;
+      color:var(--text);
+      cursor:pointer;
+      transform-origin:center;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+      transition: transform .32s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
+      animation: float 6s ease-in-out infinite;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.6rem;
+    }
+    .chip img{ width:20px; height:20px; opacity:.95 }
+
+    /* small stagger for each chip - use nth-child */
+    .chip:nth-child(1){ animation-delay:0s }
+    .chip:nth-child(2){ animation-delay:.15s; transform-origin:center; }
+    .chip:nth-child(3){ animation-delay:.32s }
+    .chip:nth-child(4){ animation-delay:.6s }
+
+    @keyframes float{
+      0%{ transform:translateY(0) rotate(var(--wob)) }
+      50%{ transform:translateY(-8px) rotate(calc(var(--wob) + 1deg)) }
+      100%{ transform:translateY(0) rotate(var(--wob)) }
+    }
+    .chip:hover{
+      transform:translateY(-12px) scale(1.045);
+      box-shadow: 0 18px 36px rgba(59,130,246,0.14);
+    }
+
+    /* little pulsing accent ring when active */
+    .chip.active{
+      background:linear-gradient(90deg, rgba(59,130,246,0.14), rgba(139,92,246,0.06));
+      border:1px solid rgba(59,130,246,0.28);
+      box-shadow: 0 18px 36px rgba(59,130,246,0.12);
+    }
+
+    /* SECTION STYLES */
+    section{
+      padding:2.5rem 1.25rem;
+      max-width:980px;
+      margin:auto;
+    }
+    .tools-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:1rem;
+      margin-top:1rem;
+    }
+    .tool-card{
+      background:rgba(255,255,255,0.03);
+      border-radius:12px;
+      padding:1rem;
+      text-align:center;
+      border:1px solid rgba(255,255,255,0.03);
+      transition:transform .28s, background .28s;
+    }
+    .tool-card:hover{ transform:translateY(-8px); background:rgba(59,130,246,0.06) }
+
+    .tool-card img{ width:42px; height:42px; margin-bottom:.55rem; display:inline-block }
+
+    /* CONTACT BOX */
+    .contact-box{
+      margin-top:2rem;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.04);
+      padding:1.1rem;
+      display:flex;
+      gap:1rem;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .contact-left{ display:flex; gap:.9rem; align-items:center }
+    .contact-left .call{
+      width:56px; height:56px; border-radius:12px;
+      background:linear-gradient(90deg,#2563eb,#8b5cf6); display:grid; place-items:center;
+      box-shadow:0 10px 28px rgba(37,99,235,0.12);
+      font-weight:800; color:#fff;
+    }
+    .contact-text{ font-weight:700 }
+    .contact-sub{ color:var(--muted); font-size:.95rem; margin-top:.18rem; font-weight:600 }
+
+    .contact-actions{ display:flex; gap:.6rem; align-items:center }
+    .btn{
+      padding:.6rem .9rem;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      background:var(--accent);
+      color:#fff;
+      font-weight:700;
+      box-shadow:0 10px 20px rgba(59,130,246,0.12);
+    }
+    .btn.ghost{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      color:var(--text);
+      font-weight:700;
+    }
+
+    /* responsive tweaks */
+    @media (max-width:640px){
+      .hero{ padding-top:5.5rem; height:82vh }
+      .hero h1{ font-size:2rem }
+      .type-box{ min-width:140px }
+      .explore-section{ gap:.6rem }
+      .contact-box{ flex-direction:column; align-items:flex-start }
+      .contact-actions{ width:100%; justify-content:space-between; margin-top:.6rem }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sameer Khan</h1>
+    <nav>
+      <a href="#hero">Home</a>
+      <a href="#explore">Explore</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="bg"></div>
+      <div class="bg layer2"></div>
+
+      <div class="content">
+        <h1>Hi, I’m Sameer</h1>
+        <p>I love learning & building — especially <strong>Kali Linux</strong>, <strong>websites</strong>, <strong>network security</strong> and <strong>technology</strong>.</p>
+
+        <!-- Type / highlight box -->
+        <div class="type-wrap" aria-hidden="true">
+          <div class="type-label">I love exploring</div>
+          <div class="type-box" id="typeBox">
+            <span class="type-inner" id="typeInner">Kali Linux</span>
+          </div>
+        </div>
+
+        <!-- Dynamic chips -->
+        <div id="explore" class="explore-section" aria-live="polite">
+          <!-- these chips will have active class toggled by JS -->
+          <div class="chip" data-key="kali"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt=""><span>Kali Linux</span></div>
+          <div class="chip" data-key="web"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt=""><span>Websites</span></div>
+          <div class="chip" data-key="network"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/networkx/networkx-original.svg" alt=""><span>Network Security</span></div>
+          <div class="chip" data-key="tech"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg" alt=""><span>Technology</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools / What I Use (kept as cards below) -->
+    <section aria-labelledby="toolsHeading">
+      <h2 id="toolsHeading" style="text-align:center; color:var(--muted)">What I Use</h2>
+      <div class="tools-grid" role="list">
+        <div class="tool-card" role="listitem">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="">
+          <div style="font-weight:800">Kali Linux</div>
+          <div style="color:var(--muted); font-size:.95rem">Security & testing</div>
+        </div>
+        <div class="tool-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" alt="">
+          <div style="font-weight:800">Windows</div>
+          <div style="color:var(--muted); font-size:.95rem">Daily use & dev</div>
+        </div>
+        <div class="tool-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg" alt="">
+          <div style="font-weight:800">Android</div>
+          <div style="color:var(--muted); font-size:.95rem">Mobile & experiments</div>
+        </div>
+        <div class="tool-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="">
+          <div style="font-weight:800">HTML & CSS</div>
+          <div style="color:var(--muted); font-size:.95rem">Web design basics</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-labelledby="contactHeading">
+      <h2 id="contactHeading" style="text-align:center; color:var(--muted)">Get in touch</h2>
+      <div class="contact-box" role="region" aria-label="Contact">
+        <div class="contact-left">
+          <div class="call">📞</div>
+          <div>
+            <div class="contact-text">Call / WhatsApp Sameer</div>
+            <div class="contact-sub">Phone: <strong id="phoneNumber">+91 73210 86174</strong></div>
+          </div>
+        </div>
+
+        <div class="contact-actions">
+          <button class="btn" id="copyBtn">Copy Phone</button>
+          <a class="btn ghost" href="tel:+917321086174" id="callLink">Call Now</a>
+        </div>
+      </div>
+    </section>
+
+    <footer style="padding:2rem 1.25rem; text-align:center; color:var(--muted)">
+      Made by Sameer — Updated design
+    </footer>
+  </main>
+
+  <script>
+    // ===== Type cycling for the small type-box =====
+    (function(){
+      const items = ["Kali Linux","Websites","Network Security","Technology"];
+      let idx = 0;
+      const el = document.getElementById('typeInner');
+      function cycle(){
+        idx = (idx + 1) % items.length;
+        // animate out / in
+        el.style.transform = 'translateY(12px)';
+        el.style.opacity = '0';
+        setTimeout(()=> {
+          el.textContent = items[idx];
+          el.style.transform = 'translateY(0)';
+          el.style.opacity = '1';
+        }, 220);
+      }
+      // start after a sec, then every 2.2s
+      setTimeout(()=> setInterval(cycle, 2200), 900);
+    })();
+
+    // ===== Chips interactivity: click to set active and update type-box =====
+    (function(){
+      const chips = document.querySelectorAll('.chip');
+      const typeInner = document.getElementById('typeInner');
+      function clearActive(){ chips.forEach(c=>c.classList.remove('active')) }
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          clearActive();
+          chip.classList.add('active');
+          const text = chip.textContent.trim();
+          // update small type box immediately
+          typeInner.style.opacity = '0';
+          setTimeout(()=>{ typeInner.textContent = text; typeInner.style.opacity = '1' }, 140);
+        });
+
+        // keyboard accessibility
+        chip.setAttribute('tabindex','0');
+        chip.addEventListener('keypress', (e)=>{
+          if(e.key === 'Enter' || e.key === ' ') chip.click();
+        });
+      });
+
+      // set first chip active by default
+      if(chips[0]) chips[0].classList.add('active');
+    })();
+
+    // ===== Copy phone number =====
+    (function(){
+      const phone = document.getElementById('phoneNumber').textContent.replace(/\s+/g,'');
+      const copyBtn = document.getElementById('copyBtn');
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(phone);
+          copyBtn.textContent = 'Copied!';
+          setTimeout(()=> copyBtn.textContent = 'Copy Phone', 1500);
+        } catch (err) {
+          // fallback
+          const tmp = document.createElement('input');
+          document.body.appendChild(tmp);
+          tmp.value = phone;
+          tmp.select();
+          document.execCommand('copy');
+          tmp.remove();
+          copyBtn.textContent = 'Copied!';
+          setTimeout(()=> copyBtn.textContent = 'Copy Phone', 1500);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
